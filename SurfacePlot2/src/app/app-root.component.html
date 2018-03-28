@@ -1,0 +1,89 @@
+<title>SurfacePlot2</title>
+<div class="row surfaceSelectors">
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">min(z)</label>
+        <input type="range" name="ZMin" min="-500" max="0" value="{{zmin}}" (change)="onChange_zmin($event.target.value)" />
+        <label id="lbl_ZMin" class="slidervalue">{{zmin}}</label>
+    </div>
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">max(z)</label>
+        <input type="range" name="ZMax" min="0" max="1000" value="{{zmax}}" (change)="onChange_zmax($event.target.value)" />
+        <label id="lbl_ZMax" class="slidervalue">{{zmax}}</label>
+    </div>
+</div>
+<div class="row surfaceSelectors">
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">min(x)</label>
+        <input type="range" name="XMin" min="-500" max="500" value="{{xmin}}" (change)="onChange_xmin($event.target.value)" />
+        <label id="lbl_XMin" class="slidervalue">{{xmin}}</label>
+    </div>
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">max(x)</label>
+        <input type="range" name="XMax" min="-500" max="500" value="{{xmax}}" (change)="onChange_xmax($event.target.value)" />
+        <label id="lbl_XMax" class="slidervalue">{{xmax}}</label>
+    </div>
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">n(x)</label>
+        <input type="range" name="Xnum" min="0" max="100" value={{xnum}} (change)="onChange_xnum($event.target.value)" />
+        <label id="lbl_Xnum" class="slidervalue">{{xnum}}</label>
+    </div>
+</div>
+<div class="row surfaceSelectors">
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">min(y)</label>
+        <input type="range" name="YMin" min="-500" max="500" value="{{ymin}}" (change)="onChange_ymin($event.target.value)" />
+        <label id="lbl_YMin" class="slidervalue">{{ymin}}</label>
+    </div>
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">max(y)</label>
+        <input type="range" name="YMax" min="-500" max="500" value="{{ymax}}" (change)="onChange_ymax($event.target.value)" />
+        <label id="lbl_YMax" class="slidervalue">{{ymax}}</label>
+    </div>
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">n(y)</label>
+        <input type="range" name="Ynum" min="0" max="100" value="{{ynum}}" (change)="onChange_ynum($event.target.value)" />
+        <label id="lbl_Ynum" class="slidervalue">{{ynum}}</label>
+    </div>
+</div>
+<div class="row surfaceSelectors">
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">Smoothing</label>
+        <input type="range" name="Smoothing" min="0" max="100" value="{{smoothing}}" (change)="onChange_smoothing($event.target.value)" />
+        <label id="lbl_Smoothing" class="slidervalue">{{smoothing}}</label>
+    </div>
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">Averaging</label>
+        <input type="range" name="Averaging" min="0" max="1" step="0.01" value="{{averaging}}" (change)="onChange_averaging($event.target.value);" />
+        <label id="lbl_Averaging" class="slidervalue">{{averaging}}</label>
+    </div>
+    <div class="col-md-4 slidergroup">
+        <label class="sliderlabel">Compression</label>
+        <input type="range" name="Compression" min="0" max="0.2" step="0.005" value="{{compressn}}" (change)="onChange_compressn($event.target.value)" />
+        <label id="lbl_Compression" class="slidervalue">{{compressn}}</label>
+    </div>
+</div>
+<div class="row angleSelectors">
+    <div class="col-md-4 slidergroup">
+        <label class="anglelabel sliderlabel">x Angle</label>
+        <input type="range" name="AngleX" min="-1.57" max="0" step="0.01" value="{{xangle}}" (change)="onChange_xangle($event.target.value)" />
+        <label id="lbl_AngleX" class="slidervalue">{{xangle}}</label>
+    </div>
+    <div class="col-md-4 slidergroup">
+        <label class="anglelabel sliderlabel">y Angle</label>
+        <input type="range" name="AngleY" min="0" max="1.57" step="0.01" value="{{yangle}}" (change)="onChange_yangle($event.target.value)" />
+        <label id="lbl_AngleY" class="slidervalue">{{yangle}}</label>
+    </div>
+    <div class="col-md-4 slidergroup">
+        <label class="anglelabel sliderlabel">z Angle</label>
+        <input type="range" name="AngleZ" min="0" max="1.57" step="0.01" value="{{zangle}}" (change)="onChange_zangle($event.target.value)" />
+        <label id="lbl_AngleZ" class="slidervalue">{{zangle}}</label>
+    </div>
+    <!--<div class="col-md-1 col-md-offset-2">
+        <button class="btn btn-success" (click)="onDraw()">Draw</button>
+    </div>-->
+</div>
+<div>
+    <app-graphic></app-graphic>
+</div>
+
+
