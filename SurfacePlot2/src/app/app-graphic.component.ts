@@ -30,7 +30,6 @@ export class AppGraphicComponent {
     xoffset: number;
     zoffset: number;
 
-
     data_raw: Point[][];
     data_smooth: Point[][];
     data_colored: Point[][];
@@ -53,8 +52,10 @@ export class AppGraphicComponent {
     windowHeight: number;
     windowWidth: number;
 
+
     constructor(private dataService: DataService, private sanitizer: DomSanitizer) {
     }  //ctor
+
 
     ngOnInit() {
         this.dataService.averaging.subscribe((averaging) => { this.averaging = averaging; this.CreateNew(); this.Render(); });
@@ -89,41 +90,12 @@ export class AppGraphicComponent {
             this.ready2Render = false;
             this.box_raw = this.GenerateBox(this.xmin, this.xmax, this.ymin, this.ymax, this.zmin, this.zmax);
             this.data_raw = this.GenerateData(this.xnum, this.xmin, this.xmax, this.ynum, this.ymin, this.ymax, this.zmin, this.zmax);
-
-            //console.log("***GENERATE***");
-            //for (var i = 0; i < this.xnum; i++) {
-            //    for (var j = 0; j < this.ynum; j++) {
-            //        {
-            //console.log("i=" + i + " j=" + j + " x=" + Math.floor(this.data_raw[i][j].x) + " y=" + Math.floor(this.data_raw[i][j].y) + " z=" + Math.floor(this.data_raw[i][j].z) + " color=" + this.data_raw[i][j].color);
-            //        }
-            //    }
-            //}
-
             this.data_smooth = this.SmoothData(this.xnum, this.ynum, this.zmin, this.zmax, this.averaging, this.compressn, this.smoothing, this.data_raw);
-
-            //console.log("***SMOOTH***");
-            //for (var i = 0; i < this.xnum; i++) {
-            //    for (var j = 0; j < this.ynum; j++) {
-            //        {
-            //console.log("i=" + i + " j=" + j + " x=" + Math.floor(this.data_smooth[i][j].x) + " y=" + Math.floor(this.data_smooth[i][j].y) + " z=" + Math.floor(this.data_smooth[i][j].z) + " color=" + this.data_smooth[i][j].color);
-            //        }
-            //    }
-            //}
-
             this.data_colored = this.ColorizeData(this.xnum, this.xmin, this.xmax, this.ynum, this.xmin, this.ymax, this.zmin, this.zmax, this.data_smooth);
-
-            //console.log("***COLORIZE***");
-            //for (var i = 0; i < this.xnum; i++){
-            //    for (var j = 0; j < this.ynum; j++) {
-            //        {
-            //            console.log("i=" + i + " j=" + j + " x=" + Math.floor(this.data_colored[i][j].x) + " y=" + Math.floor(this.data_colored[i][j].y) + " z=" + Math.floor(this.data_colored[i][j].z) + " color=" + this.data_colored[i][j].color);
-            //        }
-            //    }
-            //}
-
             this.ready2Render = true;
         }
     }  //CreateSurface
+
 
     public GenerateBox(xmin: number, xmax: number, ymin: number, ymax: number, zmin: number, zmax: number): Point[] {
         return [
@@ -137,6 +109,7 @@ export class AppGraphicComponent {
             { x: xmax, y: ymax, z: zmin, color: 'black' }
         ];
     }
+
 
     public GenerateData(xnum: number, xmin: number, xmax: number, ynum: number, ymin: number, ymax: number, zmin: number, zmax: number): Point[][] {
         var resultarray = new Array(xnum);
@@ -156,9 +129,9 @@ export class AppGraphicComponent {
         return resultarray;
     }  //GenerateData
 
+
     public SmoothData(xnum: number, ynum: number, zmin: number, zmax: number, averaging: number, compressn: number, smoothing: number, data: Point[][]): Point[][] {
         var zspan = zmax - zmin;
-
         var resultarray = new Array(xnum);
         for (var i = 0; i < xnum; i++) {
             resultarray[i] = new Array(ynum);
@@ -166,22 +139,30 @@ export class AppGraphicComponent {
                 resultarray[i][j] = { x: data[i][j].x, y: data[i][j].y, z: data[i][j].z, color: null };
             }
         }
-
         for (var t = 0; t < smoothing; t++) {
             for (var i = 0; i < xnum; i++) {
                 for (var j = 0; j < ynum; j++) {
                     var difference = 0;
                     var denominator = 0;
+                    //average the point value (z) with each of its 8 potential neighbors if they exist
                     if (i > 0) {
                         difference += resultarray[i - 1][j].z - resultarray[i][j].z;
+                        denominator++;
+                    }
+                    if (i > 0 && j > 0) {
+                        difference += resultarray[i - 1][j - 1].z - resultarray[i][j].z;
+                        denominator++;
+                    }
+                    if (i > 0 && j < (ynum - 1)) {
+                        difference += resultarray[i - 1][j + 1].z - resultarray[i][j].z;
                         denominator++;
                     }
                     if (j > 0) {
                         difference += resultarray[i][j - 1].z - resultarray[i][j].z;
                         denominator++;
                     }
-                    if (i > 0 && j > 0) {
-                        difference += resultarray[i - 1][j - 1].z - resultarray[i][j].z;
+                    if (i < (xnum - 1) && j > 0) {
+                        difference += resultarray[i + 1][j - 1].z - resultarray[i][j].z;
                         denominator++;
                     }
                     if (i < (xnum - 1)) {
@@ -217,12 +198,12 @@ export class AppGraphicComponent {
         return resultarray;
     }  //SmoothData
 
+
     public ColorizeData(xnum: number, xmin: number, xmax: number, ynum: number, ymin: number, ymax: number, zmin: number, zmax: number, data: Point[][]): Point[][] {
         var resultarray = new Array(xnum);
         for (var i = 0; i < xnum; i++) {
             resultarray[i] = new Array(ynum);
         }
-
         for (var i = 0; i < xnum; i++) {
             for (var j = 0; j < ynum; j++) {
                 resultarray[i][j] = { x: data[i][j].x, y: data[i][j].y, z: data[i][j].z, color: this.Color(data[i][j].z, zmin, zmax) };
@@ -230,6 +211,7 @@ export class AppGraphicComponent {
         }
         return resultarray;
     }  //ColorizeData
+
 
     public Color(z: number, zmin: number, zmax: number): string {
         var zspan = zmax - zmin;
@@ -245,7 +227,7 @@ export class AppGraphicComponent {
 
 
 
-    //-------------------------------- ROTATE, SCALE AND DRAW (RENDER) SURFACE AND BOX --------------------------------
+    //-------------------------------- RENDER: ROTATE, SCALE, TRANSLATE AND DRAW SURFACE AND BOX --------------------------------
 
 
 
@@ -315,6 +297,7 @@ export class AppGraphicComponent {
         }
     }  //RenderSurface
 
+
     public PopulateXRotationMatrix(xangle: number): number[][] {
         var rotationMatrix = [
             [1, 0, 0],
@@ -323,6 +306,7 @@ export class AppGraphicComponent {
         ];
         return rotationMatrix;
     }  //PopulateXRotationMatrix
+
 
     public PopulateYRotationMatrix(yangle: number): number[][] {
         var rotationMatrix = [
@@ -333,6 +317,7 @@ export class AppGraphicComponent {
         return rotationMatrix;
     } //PopulateYRotationMatrix
 
+
     public PopulateZRotationMatrix(zangle: number): number[][] {
         var rotationMatrix = [
             [Math.cos(zangle), (-1) * Math.sin(zangle), 0],
@@ -342,6 +327,7 @@ export class AppGraphicComponent {
         return rotationMatrix;
     }  //PopulateZRotationMatrix
 
+
     public RotateBox(xRotateMatrix: number[][], yRotateMatrix: number[][], zRotateMatrix: number[][], data: Point[]) {
         var resultarray = new Array(8);
         for (var i = 0; i < 8; i++) {
@@ -349,6 +335,7 @@ export class AppGraphicComponent {
         }
         return resultarray;
     }  //RotateData
+
 
     public RotateData(xnum: number, ynum: number, xRotateMatrix: number[][], yRotateMatrix: number[][], zRotateMatrix: number[][], data: Point[][]): Point[][] {
         var resultarray = new Array(xnum);
@@ -364,6 +351,7 @@ export class AppGraphicComponent {
         return resultarray;
     }  //RotateData
 
+
     public RotatePoint(xRotateMatrix: number[][], yRotateMatrix: number[][], zRotateMatrix: number[][], p: Point): Point {
         var pointMatrix_0 = [
             [p.x],
@@ -377,13 +365,19 @@ export class AppGraphicComponent {
         return { x: pointMatrix_rotated_xyz[0][0], y: pointMatrix_rotated_xyz[1][0], z: pointMatrix_rotated_xyz[2][0], color: p.color };
     }  //RotatePoint
 
+
     public MultiplyMatrices(first: number[][], second: number[][]): number[][] {
-        //          m
-        //  AB_ij = E  (A_ik)(B_kj)
-        //          k=1
+        //             m
+        //           -----
+        //           \
+        //  AB    =   \       /A    \/ B   \
+        //    ij      /       \  ik /\  kj /
+        //           /
+        //           -----
+        //            k=1
         // where
-        //i over rows in first matrix,
-        //j over columns in second matrix
+        // i over rows in first matrix,
+        // j over columns in second matrix
         // k over m = columns(length[n]) in first matrix = rows(length) of second matrix
 
         var rotationResultMatrix = [
@@ -391,7 +385,6 @@ export class AppGraphicComponent {
             [0],
             [0]
         ];
-
         for (var i = 0; i < first.length; i++) {
             for (var j = 0; j < second[0].length; j++) {
                 for (var k = 0; k < second.length; k++) {
@@ -402,6 +395,7 @@ export class AppGraphicComponent {
         return rotationResultMatrix;
     }  //MultiplyMatrices
 
+
     public ScaleBox(xscale:number, zscale:number, data: Point[]): Point[] {
         var resultarray = new Array(8);
         for (var i = 0; i < 8; i++) {
@@ -409,6 +403,7 @@ export class AppGraphicComponent {
         }
         return resultarray;
     }  //ScaleAxes
+
 
     public ScaleData(xnum: number, ynum: number, xscale: number, zscale: number, data: Point[][]): Point[][] {
         var resultarray = new Array(xnum);
@@ -429,6 +424,7 @@ export class AppGraphicComponent {
         return { x: p.x * xscale, y: p.y * 1, z: p.z * zscale * (-1), color: p.color };
     }
 
+
     public TranslateBox(xoffset: number, zoffset: number, data: Point[]): Point[] {
         var resultarray = new Array(8);
         for (var i = 0; i < 8; i++) {
@@ -436,6 +432,7 @@ export class AppGraphicComponent {
         }
         return resultarray;
     }  //TranslateAxes
+
 
     public TranslateData(xnum: number, ynum: number, xoffset: number, zoffset: number, data: Point[][]): Point[][] {
         var resultarray = new Array(xnum);
@@ -460,15 +457,14 @@ export class AppGraphicComponent {
     public CreateSVG(xnum: number, ynum: number, box: Point[], data: Point[][]) {
         var s: string = "";
         s = s + "<svg width=\"" + this.windowWidth * 0.8 + "\" height=\"" + this.windowHeight * 0.6 + "\" >";
+        //draw back of box which delimits the data, behind the data
         s = s + "<line x1 = \"" + box[0].x + "\" y1 = \"" + box[0].z + "\" x2 = \"" + box[1].x + "\" y2 = \"" + box[1].z + "\" style = \"stroke: rgb(0, 0, 0); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[1].x + "\" y1 = \"" + box[1].z + "\" x2 = \"" + box[2].x + "\" y2 = \"" + box[2].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[2].x + "\" y1 = \"" + box[2].z + "\" x2 = \"" + box[3].x + "\" y2 = \"" + box[3].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[3].x + "\" y1 = \"" + box[3].z + "\" x2 = \"" + box[0].x + "\" y2 = \"" + box[0].z + "\" style = \"stroke: rgb(0, 0, 0); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[0].x + "\" y1 = \"" + box[0].z + "\" x2 = \"" + box[4].x + "\" y2 = \"" + box[4].z + "\" style = \"stroke: rgb(0, 0, 0); stroke-width: 1\" />";
-        s = s + "<line x1 = \"" + box[1].x + "\" y1 = \"" + box[1].z + "\" x2 = \"" + box[5].x + "\" y2 = \"" + box[5].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
-        s = s + "<line x1 = \"" + box[2].x + "\" y1 = \"" + box[2].z + "\" x2 = \"" + box[6].x + "\" y2 = \"" + box[6].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[3].x + "\" y1 = \"" + box[3].z + "\" x2 = \"" + box[7].x + "\" y2 = \"" + box[7].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
-
+        //draw data
         for (var i = 0; i < this.xnum; i++) {
             for (var j = 0; j < this.ynum; j++) {
                 if (i > 0 && j > 0) {
@@ -482,18 +478,17 @@ export class AppGraphicComponent {
                 }
             }
         }
+        //draw front of the delimiting box, in front of the data
         s = s + "<line x1 = \"" + box[4].x + "\" y1 = \"" + box[4].z + "\" x2 = \"" + box[5].x + "\" y2 = \"" + box[5].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[5].x + "\" y1 = \"" + box[5].z + "\" x2 = \"" + box[6].x + "\" y2 = \"" + box[6].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[6].x + "\" y1 = \"" + box[6].z + "\" x2 = \"" + box[7].x + "\" y2 = \"" + box[7].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[7].x + "\" y1 = \"" + box[7].z + "\" x2 = \"" + box[4].x + "\" y2 = \"" + box[4].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
+        s = s + "<line x1 = \"" + box[1].x + "\" y1 = \"" + box[1].z + "\" x2 = \"" + box[5].x + "\" y2 = \"" + box[5].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
+        s = s + "<line x1 = \"" + box[2].x + "\" y1 = \"" + box[2].z + "\" x2 = \"" + box[6].x + "\" y2 = \"" + box[6].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<text x = \"" + box[3].x + "\" y = \"" + box[3].z + "\" font-size = \"12\">x</text>";
         s = s + "<text x = \"" + box[4].x + "\" y = \"" + box[4].z + "\" font-size = \"12\">y</text>";
         s = s + "<text x = \"" + box[1].x + "\" y = \"" + box[1].z + "\" font-size = \"12\">z</text>";
         s = s + "</svg>";
         this.dataSvg = this.sanitizer.bypassSecurityTrustHtml(s);
     }  //CreateSVG
-
-
-
-
 }  //component

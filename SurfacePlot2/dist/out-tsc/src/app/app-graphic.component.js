@@ -45,32 +45,8 @@ var AppGraphicComponent = /** @class */ (function () {
             this.ready2Render = false;
             this.box_raw = this.GenerateBox(this.xmin, this.xmax, this.ymin, this.ymax, this.zmin, this.zmax);
             this.data_raw = this.GenerateData(this.xnum, this.xmin, this.xmax, this.ynum, this.ymin, this.ymax, this.zmin, this.zmax);
-            //console.log("***GENERATE***");
-            //for (var i = 0; i < this.xnum; i++) {
-            //    for (var j = 0; j < this.ynum; j++) {
-            //        {
-            //console.log("i=" + i + " j=" + j + " x=" + Math.floor(this.data_raw[i][j].x) + " y=" + Math.floor(this.data_raw[i][j].y) + " z=" + Math.floor(this.data_raw[i][j].z) + " color=" + this.data_raw[i][j].color);
-            //        }
-            //    }
-            //}
             this.data_smooth = this.SmoothData(this.xnum, this.ynum, this.zmin, this.zmax, this.averaging, this.compressn, this.smoothing, this.data_raw);
-            //console.log("***SMOOTH***");
-            //for (var i = 0; i < this.xnum; i++) {
-            //    for (var j = 0; j < this.ynum; j++) {
-            //        {
-            //console.log("i=" + i + " j=" + j + " x=" + Math.floor(this.data_smooth[i][j].x) + " y=" + Math.floor(this.data_smooth[i][j].y) + " z=" + Math.floor(this.data_smooth[i][j].z) + " color=" + this.data_smooth[i][j].color);
-            //        }
-            //    }
-            //}
             this.data_colored = this.ColorizeData(this.xnum, this.xmin, this.xmax, this.ynum, this.xmin, this.ymax, this.zmin, this.zmax, this.data_smooth);
-            //console.log("***COLORIZE***");
-            //for (var i = 0; i < this.xnum; i++){
-            //    for (var j = 0; j < this.ynum; j++) {
-            //        {
-            //            console.log("i=" + i + " j=" + j + " x=" + Math.floor(this.data_colored[i][j].x) + " y=" + Math.floor(this.data_colored[i][j].y) + " z=" + Math.floor(this.data_colored[i][j].z) + " color=" + this.data_colored[i][j].color);
-            //        }
-            //    }
-            //}
             this.ready2Render = true;
         }
     }; //CreateSurface
@@ -115,16 +91,25 @@ var AppGraphicComponent = /** @class */ (function () {
                 for (var j = 0; j < ynum; j++) {
                     var difference = 0;
                     var denominator = 0;
+                    //average the point value (z) with each of its 8 potential neighbors if they exist
                     if (i > 0) {
                         difference += resultarray[i - 1][j].z - resultarray[i][j].z;
+                        denominator++;
+                    }
+                    if (i > 0 && j > 0) {
+                        difference += resultarray[i - 1][j - 1].z - resultarray[i][j].z;
+                        denominator++;
+                    }
+                    if (i > 0 && j < (ynum - 1)) {
+                        difference += resultarray[i - 1][j + 1].z - resultarray[i][j].z;
                         denominator++;
                     }
                     if (j > 0) {
                         difference += resultarray[i][j - 1].z - resultarray[i][j].z;
                         denominator++;
                     }
-                    if (i > 0 && j > 0) {
-                        difference += resultarray[i - 1][j - 1].z - resultarray[i][j].z;
+                    if (i < (xnum - 1) && j > 0) {
+                        difference += resultarray[i + 1][j - 1].z - resultarray[i][j].z;
                         denominator++;
                     }
                     if (i < (xnum - 1)) {
@@ -181,7 +166,7 @@ var AppGraphicComponent = /** @class */ (function () {
         var blu = Math.floor(Math.pow(positionRelativeToMin, 2) * 255);
         return "rgb(" + red + ", " + grn + ", " + blu + ")";
     }; //Color
-    //-------------------------------- ROTATE, SCALE AND DRAW (RENDER) SURFACE AND BOX --------------------------------
+    //-------------------------------- RENDER: ROTATE, SCALE, TRANSLATE AND DRAW SURFACE AND BOX --------------------------------
     AppGraphicComponent.prototype.Render = function () {
         if (this.ready2Render === true && typeof this.yangle !== 'undefined' && typeof this.zangle !== 'undefined') {
             this.xRotationMatrix = this.PopulateXRotationMatrix(this.xangle);
@@ -295,12 +280,17 @@ var AppGraphicComponent = /** @class */ (function () {
         return { x: pointMatrix_rotated_xyz[0][0], y: pointMatrix_rotated_xyz[1][0], z: pointMatrix_rotated_xyz[2][0], color: p.color };
     }; //RotatePoint
     AppGraphicComponent.prototype.MultiplyMatrices = function (first, second) {
-        //          m
-        //  AB_ij = E  (A_ik)(B_kj)
-        //          k=1
+        //             m
+        //           -----
+        //           \
+        //  AB    =   \       /A    \/ B   \
+        //    ij      /       \  ik /\  kj /
+        //           /
+        //           -----
+        //            k=1
         // where
-        //i over rows in first matrix,
-        //j over columns in second matrix
+        // i over rows in first matrix,
+        // j over columns in second matrix
         // k over m = columns(length[n]) in first matrix = rows(length) of second matrix
         var rotationResultMatrix = [
             [0],
@@ -363,14 +353,14 @@ var AppGraphicComponent = /** @class */ (function () {
     AppGraphicComponent.prototype.CreateSVG = function (xnum, ynum, box, data) {
         var s = "";
         s = s + "<svg width=\"" + this.windowWidth * 0.8 + "\" height=\"" + this.windowHeight * 0.6 + "\" >";
+        //draw back of box which delimits the data, behind the data
         s = s + "<line x1 = \"" + box[0].x + "\" y1 = \"" + box[0].z + "\" x2 = \"" + box[1].x + "\" y2 = \"" + box[1].z + "\" style = \"stroke: rgb(0, 0, 0); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[1].x + "\" y1 = \"" + box[1].z + "\" x2 = \"" + box[2].x + "\" y2 = \"" + box[2].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[2].x + "\" y1 = \"" + box[2].z + "\" x2 = \"" + box[3].x + "\" y2 = \"" + box[3].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[3].x + "\" y1 = \"" + box[3].z + "\" x2 = \"" + box[0].x + "\" y2 = \"" + box[0].z + "\" style = \"stroke: rgb(0, 0, 0); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[0].x + "\" y1 = \"" + box[0].z + "\" x2 = \"" + box[4].x + "\" y2 = \"" + box[4].z + "\" style = \"stroke: rgb(0, 0, 0); stroke-width: 1\" />";
-        s = s + "<line x1 = \"" + box[1].x + "\" y1 = \"" + box[1].z + "\" x2 = \"" + box[5].x + "\" y2 = \"" + box[5].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
-        s = s + "<line x1 = \"" + box[2].x + "\" y1 = \"" + box[2].z + "\" x2 = \"" + box[6].x + "\" y2 = \"" + box[6].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[3].x + "\" y1 = \"" + box[3].z + "\" x2 = \"" + box[7].x + "\" y2 = \"" + box[7].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
+        //draw data
         for (var i = 0; i < this.xnum; i++) {
             for (var j = 0; j < this.ynum; j++) {
                 if (i > 0 && j > 0) {
@@ -384,10 +374,13 @@ var AppGraphicComponent = /** @class */ (function () {
                 }
             }
         }
+        //draw front of the delimiting box, in front of the data
         s = s + "<line x1 = \"" + box[4].x + "\" y1 = \"" + box[4].z + "\" x2 = \"" + box[5].x + "\" y2 = \"" + box[5].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[5].x + "\" y1 = \"" + box[5].z + "\" x2 = \"" + box[6].x + "\" y2 = \"" + box[6].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[6].x + "\" y1 = \"" + box[6].z + "\" x2 = \"" + box[7].x + "\" y2 = \"" + box[7].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<line x1 = \"" + box[7].x + "\" y1 = \"" + box[7].z + "\" x2 = \"" + box[4].x + "\" y2 = \"" + box[4].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
+        s = s + "<line x1 = \"" + box[1].x + "\" y1 = \"" + box[1].z + "\" x2 = \"" + box[5].x + "\" y2 = \"" + box[5].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
+        s = s + "<line x1 = \"" + box[2].x + "\" y1 = \"" + box[2].z + "\" x2 = \"" + box[6].x + "\" y2 = \"" + box[6].z + "\" style = \"stroke: rgb(200, 200, 200); stroke-width: 1\" />";
         s = s + "<text x = \"" + box[3].x + "\" y = \"" + box[3].z + "\" font-size = \"12\">x</text>";
         s = s + "<text x = \"" + box[4].x + "\" y = \"" + box[4].z + "\" font-size = \"12\">y</text>";
         s = s + "<text x = \"" + box[1].x + "\" y = \"" + box[1].z + "\" font-size = \"12\">z</text>";
