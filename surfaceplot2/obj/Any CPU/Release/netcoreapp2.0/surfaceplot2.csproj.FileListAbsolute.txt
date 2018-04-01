@@ -1,0 +1,10 @@
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\bin\Any CPU\Release\netcoreapp2.0\surfaceplot2.deps.json
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\bin\Any CPU\Release\netcoreapp2.0\surfaceplot2.runtimeconfig.json
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\bin\Any CPU\Release\netcoreapp2.0\surfaceplot2.runtimeconfig.dev.json
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\bin\Any CPU\Release\netcoreapp2.0\surfaceplot2.dll
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\bin\Any CPU\Release\netcoreapp2.0\surfaceplot2.pdb
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\obj\Any CPU\Release\netcoreapp2.0\surfaceplot2.csproj.CoreCompileInputs.cache
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\obj\Any CPU\Release\netcoreapp2.0\surfaceplot2.AssemblyInfoInputs.cache
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\obj\Any CPU\Release\netcoreapp2.0\surfaceplot2.AssemblyInfo.cs
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\obj\Any CPU\Release\netcoreapp2.0\surfaceplot2.dll
+C:\Users\Chris\Documents\Source\SurfacePlot2\SurfacePlot2\obj\Any CPU\Release\netcoreapp2.0\surfaceplot2.pdb
