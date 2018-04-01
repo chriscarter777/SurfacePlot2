@@ -2,14 +2,14 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AppComponent } from './app-root.component';
+import { AppRootComponent } from './app-root.component';
 import { AppGraphicComponent } from './app-graphic.component';
 import { DataService } from '../data/data.service'
 
 
 @NgModule({
   declarations: [
-      AppComponent,
+      AppRootComponent,
       AppGraphicComponent
   ],
   imports: [
@@ -17,7 +17,7 @@ import { DataService } from '../data/data.service'
     CommonModule
   ],
   providers: [DataService, Title],
-  bootstrap: [AppComponent]
+  bootstrap: [AppRootComponent]
   
 })
 export class AppModule { }

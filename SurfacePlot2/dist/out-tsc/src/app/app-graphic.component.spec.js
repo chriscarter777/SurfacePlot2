@@ -4,7 +4,7 @@ var testing_1 = require("@angular/core/testing");
 var app_graphic_component_1 = require("./app-graphic.component");
 var data_service_1 = require("../data/data.service");
 var platform_browser_1 = require("@angular/platform-browser");
-describe('AppGraphicComponent', function () {
+describe('AppGraphicTests', function () {
     var component;
     var fixture;
     var element;

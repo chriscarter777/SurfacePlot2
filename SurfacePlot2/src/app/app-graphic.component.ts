@@ -10,25 +10,20 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 
 export class AppGraphicComponent {
-    xnum: number;
-    xmin: number;
-    xmax: number;
-    ynum: number;
-    ymin: number;
-    ymax: number;
-    zmin: number;
-    zmax: number;
-    smoothing: number;
     averaging: number;
     compressn: number;
+    smoothing: number;
     xangle: number;
+    xmax: number;
+    xmin: number;
+    xnum: number;
     yangle: number;
+    ymax: number;
+    ymin: number;
+    ynum: number;
     zangle: number;
-
-    xscale: number;
-    zscale: number;
-    xoffset: number;
-    zoffset: number;
+    zmax: number;
+    zmin: number;
 
     data_raw: Point[][];
     data_smooth: Point[][];
@@ -262,20 +257,20 @@ export class AppGraphicComponent {
             var volumeXSpan = volumeMaxX - volumeMinX;
             var volumeZSpan = volumeMaxZ - volumeMinZ;
             if (volumeXSpan != 0) {
-                this.xscale = 1000 / volumeXSpan;
+                var xscale = 1000 / volumeXSpan;
             }
             else {
-                this.xscale = 1;
+                var xscale = 1;
             }
             if (volumeZSpan != 0) {
-                this.zscale = 550 / volumeZSpan;
+                var zscale = 550 / volumeZSpan;
             }
             else {
-                this.zscale = 1;
+                var zscale = 1;
             }
 
-            this.box_scaled = this.ScaleBox(this.xscale, this.zscale, this.box_rotated);
-            this.data_scaled = this.ScaleData(this.xnum, this.ynum, this.xscale, this.zscale, this.data_rotated);
+            this.box_scaled = this.ScaleBox(xscale, zscale, this.box_rotated);
+            this.data_scaled = this.ScaleData(this.xnum, this.ynum, xscale, zscale, this.data_rotated);
 
             var volumeMinX = 9999;
             var volumeMinZ = 9999;
@@ -287,11 +282,11 @@ export class AppGraphicComponent {
                     volumeMinZ = this.box_scaled[i].z;
                 }
              }
-            this.xoffset = 400 - volumeMinX;
-            this.zoffset = 50 - volumeMinZ;
+            var xoffset = 400 - volumeMinX;
+            var zoffset = 50 - volumeMinZ;
 
-            this.box_translated = this.TranslateBox(this.xoffset, this.zoffset, this.box_scaled);
-            this.data_translated = this.TranslateData(this.xnum, this.ynum, this.xoffset, this.zoffset, this.data_scaled);
+            this.box_translated = this.TranslateBox(xoffset, zoffset, this.box_scaled);
+            this.data_translated = this.TranslateData(this.xnum, this.ynum, xoffset, zoffset, this.data_scaled);
 
             this.CreateSVG(this.xnum, this.ynum, this.box_translated, this.data_translated);
         }

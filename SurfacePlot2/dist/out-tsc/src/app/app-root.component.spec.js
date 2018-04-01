@@ -4,7 +4,7 @@ var testing_1 = require("@angular/core/testing");
 var app_root_component_1 = require("./app-root.component");
 var app_graphic_component_1 = require("./app-graphic.component");
 var data_service_1 = require("../data/data.service");
-describe('AppComponent', function () {
+describe('AppRootTests', function () {
     var component;
     var fixture;
     var element;

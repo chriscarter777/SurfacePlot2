@@ -66,25 +66,6 @@ export class DataService {
     }  //ctor
 
     public Initialize() {
-        this._xnum = 70;
-        this.xnumSource.next(this._xnum);
-        this._xmin = 0;
-        this.xminSource.next(this._xmin);
-        this._xmax = 500;
-        this.xmaxSource.next(this._xmax);
-
-        this._ynum = 70;
-        this.ynumSource.next(this._xnum);
-        this._ymin = 0;
-        this.yminSource.next(this._ymin);
-        this._ymax = 500;
-        this.ymaxSource.next(this._ymax);
-
-        this._zmin = 0;
-        this.zminSource.next(this._zmin);
-        this._zmax = 500;
-        this.zmaxSource.next(this._zmax);
-
         this._averaging = 0.9;
         this.averagingSource.next(this._averaging);
         this._compressn = 0.09;
@@ -94,10 +75,28 @@ export class DataService {
 
         this._xangle = -0.35;
         this.xangleSource.next(this._xangle);
+        this._xmax = 500;
+        this.xmaxSource.next(this._xmax);
+        this._xmin = 0;
+        this.xminSource.next(this._xmin);
+        this._xnum = 70;
+        this.xnumSource.next(this._xnum);
+
         this._yangle = 0;
         this.yangleSource.next(this._yangle);
+        this._ymax = 500;
+        this.ymaxSource.next(this._ymax);
+        this._ymin = 0;
+        this.yminSource.next(this._ymin);
+        this._ynum = 70;
+        this.ynumSource.next(this._xnum);
+
         this._zangle = 0.25;
         this.zangleSource.next(this._zangle);
+        this._zmax = 500;
+        this.zmaxSource.next(this._zmax);
+        this._zmin = 0;
+        this.zminSource.next(this._zmin);
     }
 
     public Update_xnum(value: number) {

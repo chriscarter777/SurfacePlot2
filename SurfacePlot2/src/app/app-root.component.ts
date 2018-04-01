@@ -7,7 +7,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './app-root.component.html',
   styleUrls: ['./app-root.component.css'],
 })
-export class AppComponent {
+export class AppRootComponent {
     xnum: number;
     ynum: number;
     xmin: number;
@@ -44,14 +44,6 @@ export class AppComponent {
         this.dataService.zangle.subscribe((zangle) => this.zangle = zangle);
     }
 
-    onChange_xnum(value: number) {
-        this.dataService.Update_xnum(value);
-    }
-
-    onChange_ynum(value: number) {
-        this.dataService.Update_ynum(value);
-    }
-
     onChange_averaging(value: number) {
         this.dataService.Update_averaging(value);
     }
@@ -64,40 +56,48 @@ export class AppComponent {
         this.dataService.Update_smoothing(value);
     }
 
-    onChange_xmin(value: number) {
-        this.dataService.Update_xmin(value);
+    onChange_xangle(value: number) {
+        this.dataService.Update_xangle(value);
     }
 
     onChange_xmax(value: number) {
         this.dataService.Update_xmax(value);
     }
 
-    onChange_ymin(value: number) {
-        this.dataService.Update_ymin(value);
+    onChange_xmin(value: number) {
+        this.dataService.Update_xmin(value);
     }
 
-    onChange_ymax(value: number) {
-        this.dataService.Update_ymax(value);
-    }
-
-    onChange_zmin(value: number) {
-        this.dataService.Update_zmin(value);
-    }
-
-    onChange_zmax(value: number) {
-        this.dataService.Update_zmax(value);
-    }
-
-    onChange_xangle(value: number) {
-        this.dataService.Update_xangle(value);
+    onChange_xnum(value: number) {
+        this.dataService.Update_xnum(value);
     }
 
     onChange_yangle(value: number) {
         this.dataService.Update_yangle(value);
     }
 
+    onChange_ymax(value: number) {
+        this.dataService.Update_ymax(value);
+    }
+
+    onChange_ymin(value: number) {
+        this.dataService.Update_ymin(value);
+    }
+
+    onChange_ynum(value: number) {
+        this.dataService.Update_ynum(value);
+    }
+
     onChange_zangle(value: number) {
         this.dataService.Update_zangle(value);
+    }
+
+    onChange_zmax(value: number) {
+        this.dataService.Update_zmax(value);
+    }
+
+    onChange_zmin(value: number) {
+        this.dataService.Update_zmin(value);
     }
 
 }  //component

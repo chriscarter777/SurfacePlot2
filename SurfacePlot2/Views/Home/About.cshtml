@@ -11,6 +11,7 @@
     <li>n specifies the resolution in the x and y dimensions</li>
     <li>min and max specify the range of values in each dimension</li>
     <li>the Z values are then randomly generated, averaged with their neighbors using the coefficient Averaging--this process is iterated Smoothing times</li>
-    <li>at the end of smoothing, the Z values are redistributed over the Z range using the Compression coefficient.  This reverses the tendency toward the average which the averaging introduces</li>
+    <li>at the end of each averaging iteration, the Z values are redistributed over the Z range using the Compression coefficient.  This reverses the flattening which the averaging introduces</li>
 </ul>
+<h4>A new surface is generated upon changing any of the green controls.</h4>
 <h4>Blue controls are used to specify the viewing angles for the renderer</h4>

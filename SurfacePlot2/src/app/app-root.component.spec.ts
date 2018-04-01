@@ -1,26 +1,28 @@
 import { Component } from '@angular/core';
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
-import { AppComponent } from './app-root.component';
+import { AppRootComponent } from './app-root.component';
 import { AppGraphicComponent } from './app-graphic.component';
 import { DataService } from '../data/data.service';
 import { Title } from '@angular/platform-browser';
+import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/observable/of';
 
 
-
-describe('AppComponent', () => {
-    let component: AppComponent;
-    let fixture: ComponentFixture<AppComponent>;
+describe('AppRootTests', () => {
+    let component: AppRootComponent;
+    let fixture: ComponentFixture<AppRootComponent>;
     let element: HTMLElement;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AppComponent, AppGraphicComponent],
+            declarations: [AppRootComponent, AppGraphicComponent],
             providers: [DataService]
         }).compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(AppComponent);
+        fixture = TestBed.createComponent(AppRootComponent);
+        fixture.detectChanges();
         component = fixture.componentInstance;
         element = fixture.nativeElement;
     });
@@ -33,59 +35,74 @@ describe('AppComponent', () => {
         expect(element.querySelector('title').textContent).toEqual('SurfacePlot2');
     });
 
-    xit('should update averaging', () => {
+    it('should update averaging', () => {
+        component.onChange_averaging(-1);
+        expect(component.averaging).toEqual(-1);
     });
 
-    xit('should update compression', () => {
-
+    it('should update compression', () => {
+        component.onChange_compressn(-1);
+        expect(component.compressn).toEqual(-1);
     });
 
-    xit('should update smoothing', () => {
-
+    it('should update smoothing', () => {
+        component.onChange_smoothing(-1);
+        expect(component.smoothing).toEqual(-1);
     });
 
-    xit('should update xnum', () => {
-
+    it('should update xangle', () => {
+        component.onChange_xangle(-1);
+        expect(component.xangle).toEqual(-1);
     });
 
-    xit('should update xmin', () => {
-
+    it('should update xmax', () => {
+        component.onChange_xmax(-1);
+        expect(component.xmax).toEqual(-1);
     });
 
-    xit('should update xmax', () => {
-
+    it('should update xmin', () => {
+        component.onChange_xmin(-1);
+        expect(component.xmin).toEqual(-1);
     });
 
-    xit('should update ynum', () => {
-
+    it('should update xnum', () => {
+        component.onChange_xnum(1);
+        expect(component.xnum).toEqual(1);
     });
 
-    xit('should update ymin', () => {
-
+    it('should update yangle', () => {
+        component.onChange_yangle(-1);
+        expect(component.yangle).toEqual(-1);
     });
 
-    xit('should update ymax', () => {
-
+    it('should update ymax', () => {
+        component.onChange_ymax(-1);
+        expect(component.ymax).toEqual(-1);
     });
 
-    xit('should update zmin', () => {
-
+    it('should update ymin', () => {
+        component.onChange_ymin(-1);
+        expect(component.ymin).toEqual(-1);
     });
 
-    xit('should update zmax', () => {
-
+    it('should update ynum', () => {
+        component.onChange_ynum(1);
+        expect(component.ynum).toEqual(1);
     });
 
-    xit('should update xangle', () => {
-
+    it('should update zangle', () => {
+        component.onChange_zangle(-1);
+        expect(component.zangle).toEqual(-1);
     });
 
-    xit('should update yangle', () => {
-
+    it('should update zmax', () => {
+        component.onChange_zmax(-1);
+        expect(component.zmax).toEqual(-1);
     });
 
-    xit('should update zangle', () => {
-
+    it('should update zmin', () => {
+        component.onChange_zmin(-1);
+        expect(component.zmin).toEqual(-1);
     });
 
     it('must tell what has it got in its pocketses', () => {
